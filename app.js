@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const http = require("http");
+const cors = require("cors"); // Import cors
 const { WebSocketServer } = require("ws");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -11,6 +12,15 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+
+// Enable CORS
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Allow requests from frontend
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+    credentials: true, // Allow cookies and credentials
+  })
+);
 
 app.use(bodyParser.json());
 app.use("/auth", authRoutes);
